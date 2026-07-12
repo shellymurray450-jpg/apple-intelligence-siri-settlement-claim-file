@@ -309,6 +309,7 @@ function StepPersonal(props: {
   zip: string; setZip: (v: string) => void;
   deviceInfo: string; setDeviceInfo: (v: string) => void;
   purchaseDate: string; setPurchaseDate: (v: string) => void;
+  imeiSerial: string; setImeiSerial: (v: string) => void;
   proofFile: File | null; setProofFile: (f: File | null) => void;
   requiresProof: boolean;
   tierName: string;
