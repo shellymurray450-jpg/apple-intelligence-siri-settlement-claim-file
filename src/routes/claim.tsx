@@ -100,7 +100,7 @@ function ClaimPage() {
 
   const canNextFromStep = useMemo(() => {
     if (step === 1) return !!tier;
-    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && (!selected?.requiresProof || proofFile);
+    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && purchaseDate && (!selected?.requiresProof || proofFile);
     if (step === 3) {
       if (!payment) return false;
       if (payment === "paypal") return /.+@.+\..+/.test(paypalEmail);
