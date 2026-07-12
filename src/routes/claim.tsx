@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { ShieldCheck, FileText, Users, Upload, Check, ArrowLeft, ArrowRight, Lock, CreditCard, Banknote, Mail, Landmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -31,6 +31,23 @@ const TIERS = {
   documented: { name: "Documented Claim", amount: 12980, icon: FileText, requiresProof: true, desc: "Upload proof of ownership (receipt, invoice, or serial number)." },
   family: { name: "Family Claim", amount: 20980, icon: Users, requiresProof: true, desc: "Household claim covering up to 6 Family Sharing members." },
 } as const;
+
+const IPHONE_MODELS = [
+  "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16",
+  "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15",
+  "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14",
+  "iPhone SE (3rd generation)",
+  "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13", "iPhone 13 mini",
+  "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 12 mini",
+  "iPhone SE (2nd generation)",
+  "iPhone 11 Pro Max", "iPhone 11 Pro", "iPhone 11",
+  "iPhone XS Max", "iPhone XS", "iPhone XR", "iPhone X",
+  "iPhone 8 Plus", "iPhone 8",
+  "iPhone 7 Plus", "iPhone 7",
+  "iPhone SE (1st generation)",
+  "iPhone 6s Plus", "iPhone 6s",
+  "iPhone 6 Plus", "iPhone 6",
+] as const;
 
 type TierKey = keyof typeof TIERS;
 
@@ -62,6 +79,7 @@ function ClaimPage() {
   const [stateVal, setStateVal] = useState("");
   const [zip, setZip] = useState("");
   const [deviceInfo, setDeviceInfo] = useState("");
+  const [purchaseDate, setPurchaseDate] = useState("");
 
   // Proof
   const [proofFile, setProofFile] = useState<File | null>(null);
@@ -82,7 +100,7 @@ function ClaimPage() {
 
   const canNextFromStep = useMemo(() => {
     if (step === 1) return !!tier;
-    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && (!selected?.requiresProof || proofFile);
+    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && purchaseDate && (!selected?.requiresProof || proofFile);
     if (step === 3) {
       if (!payment) return false;
       if (payment === "paypal") return /.+@.+\..+/.test(paypalEmail);
@@ -92,7 +110,7 @@ function ClaimPage() {
     }
     if (step === 4) return attest;
     return false;
-  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, selected, proofFile, payment, paypalEmail, routing, account, attest]);
+  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, selected, proofFile, payment, paypalEmail, routing, account, attest]);
 
   const handleNext = () => {
     if (!canNextFromStep) {
@@ -126,6 +144,7 @@ function ClaimPage() {
       firstName, lastName, email, phone,
       address, city, stateVal, zip,
       deviceInfo,
+      purchaseDate,
       proofFileName: proofFile?.name ?? null,
       payment: payment!,
       paypalEmail: payment === "paypal" ? paypalEmail : "",
@@ -158,6 +177,7 @@ function ClaimPage() {
           <StepPersonal
             {...{ firstName, setFirstName, lastName, setLastName, email, setEmail, phone, setPhone,
               address, setAddress, city, setCity, stateVal, setStateVal, zip, setZip, deviceInfo, setDeviceInfo,
+              purchaseDate, setPurchaseDate,
               proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "" }}
           />
         )}
@@ -285,6 +305,7 @@ function StepPersonal(props: {
   stateVal: string; setStateVal: (v: string) => void;
   zip: string; setZip: (v: string) => void;
   deviceInfo: string; setDeviceInfo: (v: string) => void;
+  purchaseDate: string; setPurchaseDate: (v: string) => void;
   proofFile: File | null; setProofFile: (f: File | null) => void;
   requiresProof: boolean;
   tierName: string;
@@ -307,11 +328,30 @@ function StepPersonal(props: {
         </div>
       </div>
 
-      <div className="mt-6">
-        <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">Apple device(s) owned <span className="text-destructive">*</span></Label>
-        <Textarea id="device" value={p.deviceInfo} onChange={(e) => p.setDeviceInfo(e.target.value)} placeholder="e.g., iPhone 15 Pro (purchased 2023), MacBook Air M2, Apple Watch Series 9" rows={3} />
-        <p className="mt-1.5 text-xs text-muted-foreground">List devices used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div>
+          <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
+          <Select value={p.deviceInfo} onValueChange={p.setDeviceInfo}>
+            <SelectTrigger id="device"><SelectValue placeholder="Select your iPhone" /></SelectTrigger>
+            <SelectContent className="max-h-72">
+              {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="purchaseDate" className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
+          <Input
+            id="purchaseDate"
+            type="date"
+            value={p.purchaseDate}
+            onChange={(e) => p.setPurchaseDate(e.target.value)}
+            min="2014-09-17"
+            max={new Date().toISOString().slice(0, 10)}
+          />
+        </div>
       </div>
+      <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+
 
       {p.requiresProof && (
         <div className="mt-6">

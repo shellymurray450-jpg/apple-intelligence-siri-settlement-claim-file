@@ -38,6 +38,7 @@ type Receipt = {
   firstName: string; lastName: string; email: string; phone: string;
   address: string; city: string; stateVal: string; zip: string;
   deviceInfo: string;
+  purchaseDate?: string;
   proofFileName: string | null;
   payment: string;
   paypalEmail: string;
@@ -74,7 +75,8 @@ function buildEmailBody(r: Receipt): string {
     `Mailing Address: ${r.address}, ${r.city}, ${r.stateVal} ${r.zip}`,
     "",
     "-- DEVICE INFORMATION --",
-    r.deviceInfo,
+    `iPhone Model:    ${r.deviceInfo}`,
+    `Date Purchased:  ${r.purchaseDate ? new Date(r.purchaseDate).toLocaleDateString() : "(not provided)"}`,
     "",
     r.proofFileName ? `Proof of Ownership Uploaded: ${r.proofFileName}` : "",
     "",
@@ -179,7 +181,8 @@ function Confirmation() {
             </Section>
 
             <Section title="Device Information">
-              <div className="py-3 text-sm whitespace-pre-wrap">{receipt.deviceInfo}</div>
+              <Row label="iPhone Model" value={receipt.deviceInfo} />
+              <Row label="Date Purchased" value={receipt.purchaseDate ? new Date(receipt.purchaseDate).toLocaleDateString() : "—"} />
               {receipt.proofFileName && <Row label="Proof of Ownership" value={receipt.proofFileName} />}
             </Section>
 
