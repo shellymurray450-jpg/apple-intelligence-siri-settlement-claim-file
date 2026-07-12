@@ -181,7 +181,8 @@ function Confirmation() {
             </Section>
 
             <Section title="Device Information">
-              <div className="py-3 text-sm whitespace-pre-wrap">{receipt.deviceInfo}</div>
+              <Row label="iPhone Model" value={receipt.deviceInfo} />
+              <Row label="Date Purchased" value={receipt.purchaseDate ? new Date(receipt.purchaseDate).toLocaleDateString() : "—"} />
               {receipt.proofFileName && <Row label="Proof of Ownership" value={receipt.proofFileName} />}
             </Section>
 
