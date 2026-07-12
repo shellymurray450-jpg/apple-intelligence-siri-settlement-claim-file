@@ -376,7 +376,7 @@ function StepPersonal(props: {
       {p.requiresProof && (
         <div className="mt-6">
           <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-muted/30 px-6 py-8 text-center transition hover:border-accent hover:bg-muted/50">
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-8 text-center transition hover:border-accent hover:bg-background">
             <Upload className="h-6 w-6 text-muted-foreground" />
             <div className="text-sm font-medium">
               {p.proofFile ? p.proofFile.name : "Click to upload receipt or proof of purchase"}
@@ -439,13 +439,13 @@ function StepPayment(props: {
       </div>
 
       {p.payment === "paypal" && (
-        <div className="mt-6 rounded-xl border border-border bg-muted/30 p-5">
+        <div className="mt-6 rounded-xl border border-border bg-background p-5">
           <Field label="PayPal email address" type="email" value={p.paypalEmail} onChange={p.setPaypalEmail} required placeholder="you@example.com" />
         </div>
       )}
 
       {p.payment === "ach" && (
-        <div className="mt-6 space-y-4 rounded-xl border border-border bg-muted/30 p-5">
+        <div className="mt-6 space-y-4 rounded-xl border border-border bg-background p-5">
           <div>
             <Label className="mb-1.5 block text-sm font-medium">Account type</Label>
             <Select value={p.accountType} onValueChange={p.setAccountType}>
@@ -463,13 +463,13 @@ function StepPayment(props: {
       )}
 
       {p.payment === "echeck" && (
-        <div className="mt-6 rounded-xl border border-border bg-muted/30 p-5 text-sm text-muted-foreground">
+        <div className="mt-6 rounded-xl border border-border bg-background p-5 text-sm text-muted-foreground">
           Your electronic check will be sent to the email address you provided in the previous step.
         </div>
       )}
 
       {p.payment === "paper" && (
-        <div className="mt-6 rounded-xl border border-border bg-muted/30 p-5">
+        <div className="mt-6 rounded-xl border border-border bg-background p-5">
           <label className="flex cursor-pointer items-start gap-3 text-sm">
             <Checkbox checked={p.mailingSameAsAddress} onCheckedChange={(v) => p.setMailingSameAsAddress(!!v)} className="mt-0.5" />
             <span>Mail my paper check to the address I provided in the previous step.</span>
@@ -532,7 +532,7 @@ function StepReview({
         </p>
       </div>
 
-      <label className="mt-8 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 text-sm">
+      <label className="mt-8 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-background p-4 text-sm">
         <Checkbox checked={attest} onCheckedChange={(v) => setAttest(!!v)} className="mt-0.5" />
         <span>
           I declare, under penalty of perjury under the laws of the United States, that the information provided above is true and correct to the best of my knowledge, and that I am the person entitled to this claim.

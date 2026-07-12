@@ -141,7 +141,7 @@ function Confirmation() {
           <strong className="text-destructive">Claims that are not emailed will not be approved.</strong>
         </p>
 
-        <div className="mt-6 inline-flex flex-col items-center rounded-xl border border-border bg-muted/40 px-6 py-4">
+        <div className="mt-6 inline-flex flex-col items-center rounded-xl border border-border bg-background px-6 py-4">
           <div className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Your Claim ID</div>
           <div className="mt-1 font-mono text-xl font-bold">{id}</div>
         </div>
@@ -166,7 +166,7 @@ function Confirmation() {
       {/* Full receipt */}
       {receipt && (
         <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-card shadow-card print:border-0 print:shadow-none">
-          <div className="border-b border-border bg-muted/30 px-6 py-4">
+          <div className="border-b border-border bg-background px-6 py-4">
             <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Claim Submission Receipt</div>
             <div className="mt-0.5 text-sm text-foreground">Submitted {new Date(receipt.submittedAt).toLocaleString()}</div>
           </div>
@@ -206,7 +206,7 @@ function Confirmation() {
             </Section>
           </div>
 
-          <div className="border-t border-border bg-muted/30 px-6 py-4 text-xs text-muted-foreground">
+          <div className="border-t border-border bg-background px-6 py-4 text-xs text-muted-foreground">
             Retain this receipt for your records. A copy should be emailed to <strong className="text-foreground">{SUPPORT_EMAIL}</strong>.
           </div>
         </div>
