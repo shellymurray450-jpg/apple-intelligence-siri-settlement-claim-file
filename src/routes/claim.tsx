@@ -193,7 +193,7 @@ function ClaimPage() {
         {step === 4 && selected && payment && (
           <StepReview
             tier={selected} payment={payment}
-            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, proofFile, paypalEmail, routing, account }}
+            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, imeiSerial, proofFile, paypalEmail, routing, account }}
             attest={attest} setAttest={setAttest}
           />
         )}
