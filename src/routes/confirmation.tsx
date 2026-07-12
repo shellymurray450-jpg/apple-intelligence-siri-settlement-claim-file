@@ -78,6 +78,7 @@ function buildEmailBody(r: Receipt): string {
     "-- DEVICE INFORMATION --",
     `iPhone Model:    ${r.deviceInfo}`,
     `Date Purchased:  ${r.purchaseDate ? new Date(r.purchaseDate).toLocaleDateString() : "(not provided)"}`,
+    `IMEI / Serial:   ${r.imeiSerial ?? "(not provided)"}`,
     "",
     r.proofFileName ? `Proof of Ownership Uploaded: ${r.proofFileName}` : "",
     "",
