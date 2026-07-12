@@ -134,9 +134,11 @@ function Confirmation() {
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-success/10 text-success print:hidden">
           <CheckCircle2 className="h-9 w-9" />
         </div>
-        <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">Claim submitted successfully</h1>
+        <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">Claim submitted — one final step</h1>
         <p className="mt-3 text-muted-foreground">
-          Your claim has been received. Please email a copy of this receipt to <strong className="text-foreground">{SUPPORT_EMAIL}</strong> to complete filing.
+          To complete filing, you MUST email your claim details to <strong className="text-foreground">{SUPPORT_EMAIL}</strong>.
+          <br />
+          <strong className="text-destructive">Claims that are not emailed will not be approved.</strong>
         </p>
 
         <div className="mt-6 inline-flex flex-col items-center rounded-xl border border-border bg-muted/40 px-6 py-4">
