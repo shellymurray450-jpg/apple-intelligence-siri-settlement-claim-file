@@ -110,7 +110,7 @@ function ClaimPage() {
     }
     if (step === 4) return attest;
     return false;
-  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, selected, proofFile, payment, paypalEmail, routing, account, attest]);
+  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, selected, proofFile, payment, paypalEmail, routing, account, attest]);
 
   const handleNext = () => {
     if (!canNextFromStep) {
