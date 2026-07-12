@@ -111,7 +111,11 @@ function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">S</div>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-label="Apple logo">
+              <path d="M17.3 8.55c-.04-1.55.63-2.73 1.99-3.6-.76-1.1-1.9-1.7-3.38-1.77-1.42-.08-2.98.84-3.56.84-.6 0-2.04-.8-3.24-.8C6.58 3.45 4 5.43 4 8.48c0 .98.18 1.99.54 3.03.48 1.4 2.21 4.82 4.01 4.77 1.2-.02 2.04-.86 3.6-.86 1.5 0 2.28.86 3.6.84 1.88-.03 3.16-3.1 3.63-4.5-2.31-1.08-2.73-3.93-2.73-4.78.02-1.4.83-2.57 2.04-3.2-.18-.45-.78-1.36-1.57-2.23zM14.66 3.3c.82-1 1.37-2.37 1.22-3.75-1.18.05-2.6.79-3.45 1.78-.76.88-1.42 2.28-1.24 3.65 1.32.1 2.67-.66 3.47-1.68z" />
+            </svg>
+          </div>
           <span className="text-sm font-semibold tracking-tight sm:text-base">Settlement Claim Center</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
