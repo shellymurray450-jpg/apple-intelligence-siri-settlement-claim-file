@@ -111,19 +111,36 @@ function ClaimPage() {
   const handleSubmit = async () => {
     if (!canNextFromStep) return;
     setSubmitting(true);
-    // Simulate secure submission
-    await new Promise((r) => setTimeout(r, 1200));
+    await new Promise((r) => setTimeout(r, 900));
     const claimId = "AISS-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2, 6).toUpperCase();
     setSubmitting(false);
+
+    // Persist full receipt to sessionStorage so the confirmation page can render every field
+    // without exposing sensitive data in the URL.
+    const receipt = {
+      id: claimId,
+      submittedAt: new Date().toISOString(),
+      tier: tier!,
+      tierName: selected!.name,
+      amount: selected!.amount,
+      firstName, lastName, email, phone,
+      address, city, stateVal, zip,
+      deviceInfo,
+      proofFileName: proofFile?.name ?? null,
+      payment: payment!,
+      paypalEmail: payment === "paypal" ? paypalEmail : "",
+      accountType: payment === "ach" ? accountType : "",
+      routing: payment === "ach" ? routing : "",
+      accountLast4: payment === "ach" ? account.slice(-4) : "",
+      mailingSameAsAddress: payment === "paper" ? mailingSameAsAddress : true,
+    };
+    try {
+      sessionStorage.setItem(`claim:${claimId}`, JSON.stringify(receipt));
+    } catch { /* ignore quota */ }
+
     navigate({
       to: "/confirmation",
-      search: {
-        id: claimId,
-        tier: tier!,
-        payment: payment!,
-        amount: selected!.amount,
-        email,
-      },
+      search: { id: claimId },
     });
   };
 
