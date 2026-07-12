@@ -489,7 +489,7 @@ function StepReview({
   data: {
     firstName: string; lastName: string; email: string; phone: string;
     address: string; city: string; stateVal: string; zip: string;
-    deviceInfo: string; proofFile: File | null;
+    deviceInfo: string; imeiSerial: string; proofFile: File | null;
     paypalEmail: string; routing: string; account: string;
   };
   attest: boolean;
