@@ -147,6 +147,7 @@ function ClaimPage() {
       address, city, stateVal, zip,
       deviceInfo,
       purchaseDate,
+      imeiSerial,
       proofFileName: proofFile?.name ?? null,
       payment: payment!,
       paypalEmail: payment === "paypal" ? paypalEmail : "",
