@@ -305,6 +305,7 @@ function StepPersonal(props: {
   stateVal: string; setStateVal: (v: string) => void;
   zip: string; setZip: (v: string) => void;
   deviceInfo: string; setDeviceInfo: (v: string) => void;
+  purchaseDate: string; setPurchaseDate: (v: string) => void;
   proofFile: File | null; setProofFile: (f: File | null) => void;
   requiresProof: boolean;
   tierName: string;
