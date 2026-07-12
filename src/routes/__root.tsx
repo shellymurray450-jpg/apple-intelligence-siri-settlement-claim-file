@@ -131,7 +131,7 @@ function SiteHeader() {
 
 function SiteFooter() {
   return (
-    <footer className="border-t border-border/60 bg-muted/40">
+    <footer className="border-t border-border/60 bg-background">
       <div className="mx-auto max-w-6xl px-4 py-10 text-sm text-muted-foreground">
         <div className="grid gap-6 sm:grid-cols-3">
           <div>

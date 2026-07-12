@@ -51,29 +51,29 @@ function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-hero text-hero-foreground">
+      <section className="bg-background text-foreground">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium">
               <span className="h-1.5 w-1.5 rounded-full bg-success" />
               Claim filing is now open
             </div>
             <h1 className="mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
               Apple Intelligence & Siri Class Action Settlement
             </h1>
-            <p className="mt-5 max-w-2xl text-base text-white/80 sm:text-lg">
+            <p className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">
               If you owned a Siri-enabled Apple device between September 17, 2014 and December 31, 2024,
               you may be entitled to compensation. File your claim in under 5 minutes.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to="/claim" className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-primary shadow-elevated transition hover:bg-white/95">
+              <Link to="/claim" className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-elevated transition hover:opacity-90">
                 Start Your Claim <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/faq" className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10">
+              <Link to="/faq" className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-sm font-medium text-foreground transition hover:bg-secondary">
                 Read the FAQ
               </Link>
             </div>
-            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-white/70">
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-2"><Lock className="h-3.5 w-3.5" /> 256-bit SSL encrypted</div>
               <div className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Filing deadline: July 2, 2026</div>
               <div className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5" /> Court-authorized portal</div>
@@ -137,7 +137,7 @@ function Home() {
       </section>
 
       {/* How it works */}
-      <section className="border-t border-border/60 bg-muted/30">
+      <section className="border-t border-border/60 bg-background">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">How filing works</h2>
