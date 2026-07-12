@@ -356,6 +356,22 @@ function StepPersonal(props: {
       </div>
       <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
 
+      <div className="mt-6">
+        <Label htmlFor="imei" className="mb-1.5 block text-sm font-medium">iPhone IMEI or Serial Number <span className="text-destructive">*</span></Label>
+        <Input
+          id="imei"
+          value={p.imeiSerial}
+          onChange={(e) => p.setImeiSerial(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20))}
+          placeholder="e.g. 356789102345678"
+          inputMode="text"
+          autoCapitalize="characters"
+        />
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          Find it in Settings → General → About, or dial *#06# on your iPhone.
+        </p>
+      </div>
+
+
 
       {p.requiresProof && (
         <div className="mt-6">
