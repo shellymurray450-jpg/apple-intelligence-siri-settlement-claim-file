@@ -328,11 +328,30 @@ function StepPersonal(props: {
         </div>
       </div>
 
-      <div className="mt-6">
-        <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">Apple device(s) owned <span className="text-destructive">*</span></Label>
-        <Textarea id="device" value={p.deviceInfo} onChange={(e) => p.setDeviceInfo(e.target.value)} placeholder="e.g., iPhone 15 Pro (purchased 2023), MacBook Air M2, Apple Watch Series 9" rows={3} />
-        <p className="mt-1.5 text-xs text-muted-foreground">List devices used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div>
+          <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
+          <Select value={p.deviceInfo} onValueChange={p.setDeviceInfo}>
+            <SelectTrigger id="device"><SelectValue placeholder="Select your iPhone" /></SelectTrigger>
+            <SelectContent className="max-h-72">
+              {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="purchaseDate" className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
+          <Input
+            id="purchaseDate"
+            type="date"
+            value={p.purchaseDate}
+            onChange={(e) => p.setPurchaseDate(e.target.value)}
+            min="2014-09-17"
+            max={new Date().toISOString().slice(0, 10)}
+          />
+        </div>
       </div>
+      <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+
 
       {p.requiresProof && (
         <div className="mt-6">
