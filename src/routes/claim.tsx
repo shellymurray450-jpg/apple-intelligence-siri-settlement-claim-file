@@ -79,6 +79,7 @@ function ClaimPage() {
   const [stateVal, setStateVal] = useState("");
   const [zip, setZip] = useState("");
   const [deviceInfo, setDeviceInfo] = useState("");
+  const [purchaseDate, setPurchaseDate] = useState("");
 
   // Proof
   const [proofFile, setProofFile] = useState<File | null>(null);
