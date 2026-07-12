@@ -185,6 +185,7 @@ function Confirmation() {
             <Section title="Device Information">
               <Row label="iPhone Model" value={receipt.deviceInfo} />
               <Row label="Date Purchased" value={receipt.purchaseDate ? new Date(receipt.purchaseDate).toLocaleDateString() : "—"} />
+              <Row label="IMEI / Serial Number" value={receipt.imeiSerial || "—"} mono />
               {receipt.proofFileName && <Row label="Proof of Ownership" value={receipt.proofFileName} />}
             </Section>
 
