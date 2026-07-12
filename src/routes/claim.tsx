@@ -507,7 +507,8 @@ function StepReview({
         <ReviewRow label="Email" value={data.email} />
         {data.phone && <ReviewRow label="Phone" value={data.phone} />}
         <ReviewRow label="Address" value={`${data.address}, ${data.city}, ${data.stateVal} ${data.zip}`} />
-        <ReviewRow label="Devices" value={data.deviceInfo} />
+        <ReviewRow label="iPhone model" value={data.deviceInfo} />
+        <ReviewRow label="IMEI / Serial Number" value={data.imeiSerial} />
         {data.proofFile && <ReviewRow label="Proof of ownership" value={data.proofFile.name} />}
         <ReviewRow label="Payment method" value={paymentName} />
         {payment === "paypal" && <ReviewRow label="PayPal email" value={data.paypalEmail} />}
