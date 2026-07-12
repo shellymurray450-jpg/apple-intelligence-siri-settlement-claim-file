@@ -520,7 +520,7 @@ function StepReview({
         )}
       </div>
 
-      <div className="mt-6 rounded-xl border-2 border-warning/40 bg-warning/10 p-4 text-sm">
+      <div className="mt-6 rounded-xl border-2 border-destructive/40 bg-destructive/10 p-4 text-sm">
         <div className="font-semibold text-foreground">Important — required to approve your claim</div>
         <p className="mt-1 text-muted-foreground">
           After you submit, you MUST email a copy of your completed claim information to{" "}
