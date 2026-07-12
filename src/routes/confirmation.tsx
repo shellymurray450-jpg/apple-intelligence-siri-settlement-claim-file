@@ -39,6 +39,7 @@ type Receipt = {
   address: string; city: string; stateVal: string; zip: string;
   deviceInfo: string;
   purchaseDate?: string;
+  imeiSerial?: string;
   proofFileName: string | null;
   payment: string;
   paypalEmail: string;
