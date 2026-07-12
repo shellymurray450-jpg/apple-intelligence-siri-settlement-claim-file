@@ -177,6 +177,7 @@ function ClaimPage() {
           <StepPersonal
             {...{ firstName, setFirstName, lastName, setLastName, email, setEmail, phone, setPhone,
               address, setAddress, city, setCity, stateVal, setStateVal, zip, setZip, deviceInfo, setDeviceInfo,
+              purchaseDate, setPurchaseDate,
               proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "" }}
           />
         )}
