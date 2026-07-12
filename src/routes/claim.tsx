@@ -144,6 +144,7 @@ function ClaimPage() {
       firstName, lastName, email, phone,
       address, city, stateVal, zip,
       deviceInfo,
+      purchaseDate,
       proofFileName: proofFile?.name ?? null,
       payment: payment!,
       paypalEmail: payment === "paypal" ? paypalEmail : "",
