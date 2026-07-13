@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock } from "lucide-react";
+import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock, Calendar, Gavel, DollarSign } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -75,8 +75,55 @@ function Home() {
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-2"><Lock className="h-3.5 w-3.5" /> 256-bit SSL encrypted</div>
-              <div className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Filing deadline: July 2, 2026</div>
+              <div className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Filing deadline: August 1, 2026</div>
               <div className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5" /> Court-authorized portal</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Settlement Fund & Key Dates */}
+      <section className="border-t border-border/60 bg-background">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Settlement Fund & Key Dates</h2>
+            <p className="mt-3 text-muted-foreground">
+              Important information about the settlement fund and the timeline for filing your claim.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">
+                <DollarSign className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">$250 Million Fund</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Apple has established a $250 million settlement fund to compensate eligible Siri-enabled device users for claims related to this class action.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">
+                <Calendar className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Filing Opens</h3>
+              <p className="mt-2 text-2xl font-bold tracking-tight">March 1, 2026</p>
+              <p className="mt-1 text-sm text-muted-foreground">The earliest date claims can be submitted.</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">
+                <Clock className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Filing Deadline</h3>
+              <p className="mt-2 text-2xl font-bold tracking-tight">August 1, 2026</p>
+              <p className="mt-1 text-sm text-muted-foreground">All claims must be submitted by this date.</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">
+                <Gavel className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Final Approval Hearing</h3>
+              <p className="mt-2 text-2xl font-bold tracking-tight">December 3, 2026</p>
+              <p className="mt-1 text-sm text-muted-foreground">The court will decide whether to approve the settlement.</p>
             </div>
           </div>
         </div>
