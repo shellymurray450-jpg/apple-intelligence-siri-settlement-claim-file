@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const searchSchema = z.object({
-  tier: z.enum(["standard", "documented", "family"]).optional(),
+  tier: z.enum(["standard", "documented", "family", "devices2", "devices3", "devices4", "devices5", "devices6"]).optional(),
 });
 
 export const Route = createFileRoute("/claim")({
@@ -30,6 +30,11 @@ const TIERS = {
   standard: { name: "Standard Claim", amount: 1980, icon: ShieldCheck, requiresProof: false, desc: "No documentation required — attestation only." },
   documented: { name: "Documented Claim", amount: 12980, icon: FileText, requiresProof: true, desc: "Upload proof of ownership (receipt, invoice, or serial number)." },
   family: { name: "Family Claim", amount: 20980, icon: Users, requiresProof: true, desc: "Household claim covering up to 6 Family Sharing members." },
+  devices2: { name: "2 Device Claim", amount: 3960, icon: FileText, requiresProof: true, desc: "For claimants filing on two eligible iPhones — proof of ownership required for each." },
+  devices3: { name: "3 Device Claim", amount: 5940, icon: FileText, requiresProof: true, desc: "For claimants filing on three eligible iPhones — proof of ownership required for each." },
+  devices4: { name: "4 Device Claim", amount: 7920, icon: FileText, requiresProof: true, desc: "For claimants filing on four eligible iPhones — proof of ownership required for each." },
+  devices5: { name: "5 Device Claim", amount: 9900, icon: FileText, requiresProof: true, desc: "For claimants filing on five eligible iPhones — proof of ownership required for each." },
+  devices6: { name: "6 Device Claim", amount: 11880, icon: FileText, requiresProof: true, desc: "For claimants filing on six eligible iPhones — proof of ownership required for each." },
 } as const;
 
 const IPHONE_MODELS = [
