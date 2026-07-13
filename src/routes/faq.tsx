@@ -18,7 +18,7 @@ const faqs = [
   { q: "What are the claim amounts?", a: "Standard Claim: $1,980. Documented Claim: $12,980 (requires proof of ownership). Family Claim: $20,980 (covers up to 6 family members)." },
   { q: "What documentation is required for the Documented Claim?", a: "Upload a receipt, invoice, order confirmation, or a screenshot showing the device serial number tied to your Apple ID as proof of ownership." },
   { q: "What payment methods are available?", a: "You can choose PayPal, ACH Direct Deposit, Electronic Check (e-Check), or a mailed Paper Check when submitting your claim." },
-  { q: "When is the deadline to file?", a: "All claims must be submitted no later than July 2, 2026 at 11:59 PM Pacific Time." },
+  { q: "When is the deadline to file?", a: "All claims must be submitted no later than August 1, 2026 at 11:59 PM Pacific Time." },
   { q: "When will I receive my payment?", a: "Payments are issued after the settlement receives final court approval, expected in Q4 2026. Most electronic payments arrive within 5–7 business days of approval." },
   { q: "Is my information secure?", a: "Yes. All submissions are transmitted over 256-bit SSL encryption and stored on court-authorized secure servers." },
 ];
