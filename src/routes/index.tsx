@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock } from "lucide-react";
+import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock, Calendar, Gavel, DollarSign } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -75,7 +75,7 @@ function Home() {
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-2"><Lock className="h-3.5 w-3.5" /> 256-bit SSL encrypted</div>
-              <div className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Filing deadline: July 2, 2026</div>
+              <div className="flex items-center gap-2"><Clock className="h-3.5 w-3.5" /> Filing deadline: August 1, 2026</div>
               <div className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5" /> Court-authorized portal</div>
             </div>
           </div>
