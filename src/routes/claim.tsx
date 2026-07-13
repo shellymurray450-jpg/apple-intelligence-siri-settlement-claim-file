@@ -227,7 +227,8 @@ function ClaimPage() {
             {...{ firstName, setFirstName, lastName, setLastName, email, setEmail, phone, setPhone,
               address, setAddress, city, setCity, stateVal, setStateVal, zip, setZip, deviceInfo, setDeviceInfo,
               purchaseDate, setPurchaseDate, imeiSerial, setImeiSerial,
-              proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "" }}
+              proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "",
+              additionalDevices, updateExtra }}
           />
         )}
         {step === 3 && (
@@ -239,7 +240,7 @@ function ClaimPage() {
         {step === 4 && selected && payment && (
           <StepReview
             tier={selected} payment={payment}
-            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, imeiSerial, proofFile, paypalEmail, routing, account }}
+            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, proofFile, paypalEmail, routing, account, additionalDevices }}
             attest={attest} setAttest={setAttest}
           />
         )}
