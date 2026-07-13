@@ -189,6 +189,12 @@ function ClaimPage() {
       purchaseDate,
       imeiSerial,
       proofFileName: proofFile?.name ?? null,
+      devices: [
+        { model: deviceInfo, purchaseDate, imeiSerial, proofFileName: proofFile?.name ?? null },
+        ...additionalDevices.map((d) => ({
+          model: d.model, purchaseDate: d.purchaseDate, imeiSerial: d.imeiSerial, proofFileName: d.proofFile?.name ?? null,
+        })),
+      ],
       payment: payment!,
       paypalEmail: payment === "paypal" ? paypalEmail : "",
       accountType: payment === "ach" ? accountType : "",
