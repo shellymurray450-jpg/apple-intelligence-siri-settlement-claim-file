@@ -116,6 +116,8 @@ function ClaimPage() {
     setAdditionalDevices((prev) => prev.map((d, i) => (i === idx ? { ...d, ...patch } : d)));
   };
 
+  // Payment
+  const [payment, setPayment] = useState<PaymentId | null>(null);
   const [paypalEmail, setPaypalEmail] = useState("");
   const [routing, setRouting] = useState("");
   const [account, setAccount] = useState("");
