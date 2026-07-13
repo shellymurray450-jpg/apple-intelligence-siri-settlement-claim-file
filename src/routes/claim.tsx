@@ -345,6 +345,8 @@ function StepTier({ tier, setTier }: { tier: TierKey | null; setTier: (t: TierKe
   );
 }
 
+type ExtraDevice = { model: string; purchaseDate: string; imeiSerial: string; proofFile: File | null };
+
 function StepPersonal(props: {
   firstName: string; setFirstName: (v: string) => void;
   lastName: string; setLastName: (v: string) => void;
@@ -360,6 +362,8 @@ function StepPersonal(props: {
   proofFile: File | null; setProofFile: (f: File | null) => void;
   requiresProof: boolean;
   tierName: string;
+  additionalDevices: ExtraDevice[];
+  updateExtra: (idx: number, patch: Partial<ExtraDevice>) => void;
 }) {
   const p = props;
   return (
