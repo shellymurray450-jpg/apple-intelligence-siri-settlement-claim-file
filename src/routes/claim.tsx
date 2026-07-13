@@ -96,7 +96,6 @@ function ClaimPage() {
   const [proofFile, setProofFile] = useState<File | null>(null);
 
   // Additional devices (2..N) when a multi-device tier is chosen
-  type ExtraDevice = { model: string; purchaseDate: string; imeiSerial: string; proofFile: File | null };
   const [additionalDevices, setAdditionalDevices] = useState<ExtraDevice[]>([]);
 
   const deviceCount = tier && DEVICE_COUNT[tier] ? DEVICE_COUNT[tier] : 1;
