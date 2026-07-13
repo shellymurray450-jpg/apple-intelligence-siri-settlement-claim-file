@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { ShieldCheck, FileText, Users, Upload, Check, ArrowLeft, ArrowRight, Lock, CreditCard, Banknote, Mail, Landmark } from "lucide-react";
+import { ShieldCheck, FileText, Users, Upload, Check, ArrowLeft, ArrowRight, Lock, CreditCard, Banknote, Mail, Landmark, Smartphone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -12,6 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const searchSchema = z.object({
   tier: z.enum(["standard", "documented", "family", "devices2", "devices3", "devices4", "devices5", "devices6"]).optional(),
 });
+
+const DEVICE_COUNT: Record<string, number> = {
+  devices2: 2, devices3: 3, devices4: 4, devices5: 5, devices6: 6,
+};
 
 export const Route = createFileRoute("/claim")({
   validateSearch: searchSchema,
