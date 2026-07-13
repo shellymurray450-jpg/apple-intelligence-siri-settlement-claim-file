@@ -383,72 +383,139 @@ function StepPersonal(props: {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div>
-          <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
-          <Select value={p.deviceInfo} onValueChange={p.setDeviceInfo}>
-            <SelectTrigger id="device"><SelectValue placeholder="Select your iPhone" /></SelectTrigger>
-            <SelectContent className="max-h-72">
-              {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-            </SelectContent>
-          </Select>
+      <div className="mt-8 rounded-xl border border-border bg-background p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Smartphone className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold">
+            {p.additionalDevices.length > 0 ? "Device 1" : "Device information"}
+          </h3>
         </div>
-        <div>
-          <Label htmlFor="purchaseDate" className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
-          <Input
-            id="purchaseDate"
-            type="date"
-            value={p.purchaseDate}
-            onChange={(e) => p.setPurchaseDate(e.target.value)}
-            min="2014-09-17"
-            max={new Date().toISOString().slice(0, 10)}
-          />
-        </div>
-      </div>
-      <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
 
-      <div className="mt-6">
-        <Label htmlFor="imei" className="mb-1.5 block text-sm font-medium">iPhone IMEI or Serial Number <span className="text-destructive">*</span></Label>
-        <Input
-          id="imei"
-          value={p.imeiSerial}
-          onChange={(e) => p.setImeiSerial(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20))}
-          placeholder="e.g. 356789102345678"
-          inputMode="text"
-          autoCapitalize="characters"
-        />
-        <p className="mt-1.5 text-xs text-muted-foreground">
-          Find it in Settings → General → About, or dial *#06# on your iPhone.
-        </p>
-      </div>
-
-
-
-      {p.requiresProof && (
-        <div className="mt-6">
-          <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-8 text-center transition hover:border-accent hover:bg-background">
-            <Upload className="h-6 w-6 text-muted-foreground" />
-            <div className="text-sm font-medium">
-              {p.proofFile ? p.proofFile.name : "Click to upload receipt or proof of purchase"}
-            </div>
-            <div className="text-xs text-muted-foreground">PDF, JPG, or PNG · Max 10MB</div>
-            <input
-              type="file"
-              className="hidden"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f && f.size > 10 * 1024 * 1024) { toast.error("File is too large (max 10MB)."); return; }
-                p.setProofFile(f ?? null);
-              }}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <Label htmlFor="device" className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
+            <Select value={p.deviceInfo} onValueChange={p.setDeviceInfo}>
+              <SelectTrigger id="device"><SelectValue placeholder="Select your iPhone" /></SelectTrigger>
+              <SelectContent className="max-h-72">
+                {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="purchaseDate" className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
+            <Input
+              id="purchaseDate"
+              type="date"
+              value={p.purchaseDate}
+              onChange={(e) => p.setPurchaseDate(e.target.value)}
+              min="2014-09-17"
+              max={new Date().toISOString().slice(0, 10)}
             />
-          </label>
+          </div>
         </div>
-      )}
+        <p className="mt-1.5 text-xs text-muted-foreground">Device must have been used during the class period (Sept 17, 2014 – Dec 31, 2024).</p>
+
+        <div className="mt-4">
+          <Label htmlFor="imei" className="mb-1.5 block text-sm font-medium">iPhone IMEI or Serial Number <span className="text-destructive">*</span></Label>
+          <Input
+            id="imei"
+            value={p.imeiSerial}
+            onChange={(e) => p.setImeiSerial(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20))}
+            placeholder="e.g. 356789102345678"
+            inputMode="text"
+            autoCapitalize="characters"
+          />
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Find it in Settings → General → About, or dial *#06# on your iPhone.
+          </p>
+        </div>
+
+        {p.requiresProof && (
+          <div className="mt-4">
+            <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-8 text-center transition hover:border-accent hover:bg-background">
+              <Upload className="h-6 w-6 text-muted-foreground" />
+              <div className="text-sm font-medium">
+                {p.proofFile ? p.proofFile.name : "Click to upload receipt or proof of purchase"}
+              </div>
+              <div className="text-xs text-muted-foreground">PDF, JPG, or PNG · Max 10MB</div>
+              <input
+                type="file"
+                className="hidden"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f && f.size > 10 * 1024 * 1024) { toast.error("File is too large (max 10MB)."); return; }
+                  p.setProofFile(f ?? null);
+                }}
+              />
+            </label>
+          </div>
+        )}
+      </div>
+
+      {p.additionalDevices.map((d, i) => (
+        <div key={i} className="mt-6 rounded-xl border border-border bg-background p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <Smartphone className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-semibold">Device {i + 2}</h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label className="mb-1.5 block text-sm font-medium">iPhone model <span className="text-destructive">*</span></Label>
+              <Select value={d.model} onValueChange={(v) => p.updateExtra(i, { model: v })}>
+                <SelectTrigger><SelectValue placeholder="Select iPhone" /></SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {IPHONE_MODELS.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="mb-1.5 block text-sm font-medium">Date purchased <span className="text-destructive">*</span></Label>
+              <Input
+                type="date"
+                value={d.purchaseDate}
+                onChange={(e) => p.updateExtra(i, { purchaseDate: e.target.value })}
+                min="2014-09-17"
+                max={new Date().toISOString().slice(0, 10)}
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <Label className="mb-1.5 block text-sm font-medium">IMEI or Serial Number <span className="text-destructive">*</span></Label>
+            <Input
+              value={d.imeiSerial}
+              onChange={(e) => p.updateExtra(i, { imeiSerial: e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 20) })}
+              placeholder="e.g. 356789102345678"
+              autoCapitalize="characters"
+            />
+          </div>
+          <div className="mt-4">
+            <Label className="mb-1.5 block text-sm font-medium">Proof of ownership <span className="text-destructive">*</span></Label>
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-6 py-6 text-center transition hover:border-accent">
+              <Upload className="h-5 w-5 text-muted-foreground" />
+              <div className="text-sm font-medium">
+                {d.proofFile ? d.proofFile.name : "Click to upload receipt or proof of purchase"}
+              </div>
+              <div className="text-xs text-muted-foreground">PDF, JPG, or PNG · Max 10MB</div>
+              <input
+                type="file"
+                className="hidden"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f && f.size > 10 * 1024 * 1024) { toast.error("File is too large (max 10MB)."); return; }
+                  p.updateExtra(i, { proofFile: f ?? null });
+                }}
+              />
+            </label>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
+
 
 function StepPayment(props: {
   payment: PaymentId | null; setPayment: (p: PaymentId) => void;
