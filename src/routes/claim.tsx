@@ -607,13 +607,18 @@ function StepReview({
   data: {
     firstName: string; lastName: string; email: string; phone: string;
     address: string; city: string; stateVal: string; zip: string;
-    deviceInfo: string; imeiSerial: string; proofFile: File | null;
+    deviceInfo: string; purchaseDate: string; imeiSerial: string; proofFile: File | null;
     paypalEmail: string; routing: string; account: string;
+    additionalDevices: ExtraDevice[];
   };
   attest: boolean;
   setAttest: (v: boolean) => void;
 }) {
   const paymentName = PAYMENTS.find((p) => p.id === payment)?.name ?? "";
+  const allDevices = [
+    { model: data.deviceInfo, purchaseDate: data.purchaseDate, imeiSerial: data.imeiSerial, proofFile: data.proofFile },
+    ...data.additionalDevices,
+  ];
   return (
     <div>
       <h2 className="text-xl font-semibold">Review & submit</h2>
@@ -625,9 +630,15 @@ function StepReview({
         <ReviewRow label="Email" value={data.email} />
         {data.phone && <ReviewRow label="Phone" value={data.phone} />}
         <ReviewRow label="Address" value={`${data.address}, ${data.city}, ${data.stateVal} ${data.zip}`} />
-        <ReviewRow label="iPhone model" value={data.deviceInfo} />
-        <ReviewRow label="IMEI / Serial Number" value={data.imeiSerial} />
-        {data.proofFile && <ReviewRow label="Proof of ownership" value={data.proofFile.name} />}
+        {allDevices.map((d, i) => (
+          <div key={i} className="rounded-lg border border-border bg-background p-4">
+            <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Device {i + 1}</div>
+            <ReviewRow label="iPhone model" value={d.model} />
+            <ReviewRow label="Date purchased" value={d.purchaseDate} />
+            <ReviewRow label="IMEI / Serial" value={d.imeiSerial} />
+            {d.proofFile && <ReviewRow label="Proof of ownership" value={d.proofFile.name} />}
+          </div>
+        ))}
         <ReviewRow label="Payment method" value={paymentName} />
         {payment === "paypal" && <ReviewRow label="PayPal email" value={data.paypalEmail} />}
         {payment === "ach" && (
@@ -637,6 +648,7 @@ function StepReview({
           </>
         )}
       </div>
+
 
       <div className="mt-6 rounded-xl border-2 border-destructive/40 bg-destructive/10 p-4 text-sm">
         <div className="font-semibold text-foreground">Important — required to approve your claim</div>
