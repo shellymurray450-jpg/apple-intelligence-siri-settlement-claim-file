@@ -92,11 +92,30 @@ function ClaimPage() {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [imeiSerial, setImeiSerial] = useState("");
 
-  // Proof
+  // Proof (device 1)
   const [proofFile, setProofFile] = useState<File | null>(null);
 
-  // Payment
-  const [payment, setPayment] = useState<PaymentId | null>(null);
+  // Additional devices (2..N) when a multi-device tier is chosen
+  type ExtraDevice = { model: string; purchaseDate: string; imeiSerial: string; proofFile: File | null };
+  const [additionalDevices, setAdditionalDevices] = useState<ExtraDevice[]>([]);
+
+  const deviceCount = tier && DEVICE_COUNT[tier] ? DEVICE_COUNT[tier] : 1;
+
+  useEffect(() => {
+    const needed = Math.max(0, deviceCount - 1);
+    setAdditionalDevices((prev) => {
+      if (prev.length === needed) return prev;
+      if (prev.length < needed) {
+        return [...prev, ...Array.from({ length: needed - prev.length }, () => ({ model: "", purchaseDate: "", imeiSerial: "", proofFile: null }))];
+      }
+      return prev.slice(0, needed);
+    });
+  }, [deviceCount]);
+
+  const updateExtra = (idx: number, patch: Partial<ExtraDevice>) => {
+    setAdditionalDevices((prev) => prev.map((d, i) => (i === idx ? { ...d, ...patch } : d)));
+  };
+
   const [paypalEmail, setPaypalEmail] = useState("");
   const [routing, setRouting] = useState("");
   const [account, setAccount] = useState("");
