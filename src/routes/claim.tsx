@@ -130,9 +130,18 @@ function ClaimPage() {
 
   const selected = tier ? TIERS[tier] : null;
 
+  const extrasValid = additionalDevices.every(
+    (d) => d.model && d.purchaseDate && d.imeiSerial.trim().length >= 6 && d.proofFile
+  );
+
   const canNextFromStep = useMemo(() => {
     if (step === 1) return !!tier;
-    if (step === 2) return firstName && lastName && email && address && city && stateVal && zip && deviceInfo && purchaseDate && imeiSerial.trim().length >= 6 && (!selected?.requiresProof || proofFile);
+    if (step === 2)
+      return (
+        firstName && lastName && email && address && city && stateVal && zip &&
+        deviceInfo && purchaseDate && imeiSerial.trim().length >= 6 &&
+        (!selected?.requiresProof || proofFile) && extrasValid
+      );
     if (step === 3) {
       if (!payment) return false;
       if (payment === "paypal") return /.+@.+\..+/.test(paypalEmail);
@@ -142,7 +151,8 @@ function ClaimPage() {
     }
     if (step === 4) return attest;
     return false;
-  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, selected, proofFile, payment, paypalEmail, routing, account, attest]);
+  }, [step, tier, firstName, lastName, email, address, city, stateVal, zip, deviceInfo, purchaseDate, imeiSerial, selected, proofFile, extrasValid, payment, paypalEmail, routing, account, attest]);
+
 
   const handleNext = () => {
     if (!canNextFromStep) {
