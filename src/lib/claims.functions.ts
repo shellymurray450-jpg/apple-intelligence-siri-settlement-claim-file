@@ -67,5 +67,5 @@ export const listClaimsAdmin = createServerFn({ method: "POST" })
       .order("submitted_at", { ascending: false })
       .limit(500);
     if (error) throw new Error(error.message);
-    return { claims: JSON.parse(JSON.stringify(rows ?? [])).map((r: { payload: unknown }) => r.payload) as unknown[] };
+    return { claimsJson: JSON.stringify((rows ?? []).map((r) => r.payload)) };
   });
