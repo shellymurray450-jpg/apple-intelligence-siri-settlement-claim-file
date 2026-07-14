@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock, Calendar, Gavel, DollarSign } from "lucide-react";
+import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock, Calendar, Gavel, DollarSign, Folder } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -79,6 +79,27 @@ function Home() {
               <div className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5" /> Court-authorized portal</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Admin Folder */}
+      <section className="border-t border-border/60 bg-background">
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <Link
+            to="/admin"
+            className="group inline-flex items-center gap-4 rounded-xl border border-border bg-card px-5 py-4 shadow-card transition hover:shadow-elevated"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 text-accent transition group-hover:bg-accent/20">
+              <Folder className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-semibold">Apple Intelligence &amp; Siri Settlement Portal</span>
+                <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+              </div>
+              <div className="mt-0.5 text-xs text-muted-foreground">Admin access only — password required</div>
+            </div>
+          </Link>
         </div>
       </section>
 
