@@ -205,6 +205,13 @@ function ClaimPage() {
       sessionStorage.setItem(`claim:${claimId}`, JSON.stringify(receipt));
     } catch { /* ignore quota */ }
 
+    try {
+      const { saveClaim } = await import("@/lib/claims.functions");
+      await saveClaim({ data: receipt });
+    } catch (err) {
+      console.error("Failed to persist claim", err);
+    }
+
     navigate({
       to: "/confirmation",
       search: { id: claimId },
