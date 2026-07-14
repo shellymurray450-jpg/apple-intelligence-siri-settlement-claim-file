@@ -20,7 +20,7 @@ export const Route = createFileRoute("/confirmation")({
   component: Confirmation,
 });
 
-const SUPPORT_EMAIL = "applesettlementclaim@icloud.com";
+const SUPPORT_EMAIL = "appleintelligenceandsirisettle@gmail.com";
 
 const PAYMENT_NAMES: Record<string, string> = {
   paypal: "PayPal",
