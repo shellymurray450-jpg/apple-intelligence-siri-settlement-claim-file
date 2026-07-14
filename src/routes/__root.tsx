@@ -156,7 +156,7 @@ function SiteFooter() {
             <div className="font-semibold text-foreground">Need Help? Contact Support</div>
             <ul className="mt-2 space-y-1.5 text-xs">
               <li><a href="tel:19856023749" className="hover:text-foreground">1-985-602-3749</a></li>
-              <li><a href="mailto:applesettlementclaim@icloud.com" className="hover:text-foreground break-all">applesettlementclaim@icloud.com</a></li>
+              <li><a href="mailto:appleintelligenceandsirisettle@gmail.com" className="hover:text-foreground break-all">appleintelligenceandsirisettle@gmail.com</a></li>
               <li>Mon–Fri, 9am–6pm ET</li>
             </ul>
           </div>
