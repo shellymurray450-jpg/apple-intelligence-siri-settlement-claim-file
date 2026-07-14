@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock, Calendar, Gavel, DollarSign } from "lucide-react";
+import { Check, ShieldCheck, FileText, Users, ArrowRight, Clock, Lock, Calendar, Gavel, DollarSign, Folder } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
