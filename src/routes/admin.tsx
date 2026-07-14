@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Folder, Lock, ArrowLeft, FileText, User, Mail, Phone, MapPin, Smartphone, CreditCard, DollarSign, Calendar, RefreshCw } from "lucide-react";
+import { Folder, Lock, ArrowLeft, FileText, User, Mail, Phone, MapPin, Smartphone, CreditCard, Calendar, RefreshCw } from "lucide-react";
 import { listClaimsAdmin } from "@/lib/claims.functions";
 
 export const Route = createFileRoute("/admin")({
