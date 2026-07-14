@@ -47,7 +47,7 @@ export const saveClaim = createServerFn({ method: "POST" })
       routing: data.routing ?? "",
       account_last4: data.accountLast4 ?? "",
       mailing_same_as_address: data.mailingSameAsAddress ?? true,
-      payload: data,
+      payload: data as unknown as Record<string, never>,
     });
     if (error) throw new Error(error.message);
     return { ok: true as const };
