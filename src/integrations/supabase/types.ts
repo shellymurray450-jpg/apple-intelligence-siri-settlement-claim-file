@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      claims: {
+        Row: {
+          account_last4: string | null
+          account_type: string | null
+          address: string | null
+          amount: number | null
+          city: string | null
+          email: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          mailing_same_as_address: boolean | null
+          payload: Json
+          payment: string | null
+          paypal_email: string | null
+          phone: string | null
+          routing: string | null
+          state_val: string | null
+          submitted_at: string
+          tier: string | null
+          tier_name: string | null
+          zip: string | null
+        }
+        Insert: {
+          account_last4?: string | null
+          account_type?: string | null
+          address?: string | null
+          amount?: number | null
+          city?: string | null
+          email?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          mailing_same_as_address?: boolean | null
+          payload: Json
+          payment?: string | null
+          paypal_email?: string | null
+          phone?: string | null
+          routing?: string | null
+          state_val?: string | null
+          submitted_at?: string
+          tier?: string | null
+          tier_name?: string | null
+          zip?: string | null
+        }
+        Update: {
+          account_last4?: string | null
+          account_type?: string | null
+          address?: string | null
+          amount?: number | null
+          city?: string | null
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          mailing_same_as_address?: boolean | null
+          payload?: Json
+          payment?: string | null
+          paypal_email?: string | null
+          phone?: string | null
+          routing?: string | null
+          state_val?: string | null
+          submitted_at?: string
+          tier?: string | null
+          tier_name?: string | null
+          zip?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
